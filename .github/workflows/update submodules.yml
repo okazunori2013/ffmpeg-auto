@@ -1,0 +1,28 @@
+name: update submodules
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  push:
+    branches: 
+      - master
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Preparation
+      - name: Checkout
+        uses: actions/checkout@v3 
+        with:
+          submodules: recursive
+      - name: Update submodules
+        id: update
+        run: git submodule update --remote --recursive 
+      - name: Add and commit files
+        run: |
+          git add .
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "Update submodules at $(date "+DATE: %Y-%m-%d TIME: %H:%M:%S")"
+      - name: Push changes
+        uses: ad-m/github-push-action@master
