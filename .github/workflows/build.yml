@@ -1,0 +1,63 @@
+name: build
+
+on:
+  pull_request:
+  push:
+    branches: 
+      - master
+  workflow_dispatch:
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, windows-2019]  
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Preparation
+        shell: cmd
+        run: |
+          fsutil 8dot3name set 0
+          echo "Adding GNU tar to PATH"
+          echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
+      - name: cuda-toolkit
+        uses: Jimver/cuda-toolkit@master
+      - name: Checkout
+        uses: actions/checkout@v3 
+        with:
+          submodules: recursive
+      - name: Patch bash scripts
+        shell: pwsh
+        run: |
+          sed -i 's/do_prompt /echo /g' media-autobuild_suite/build/media-suite_helper.sh media-autobuild_suite/build/media-suite_compile.sh
+          sed -i 's/read.*yn/yn=y/g' media-autobuild_suite/build/media-suite_update.sh
+          sed -i "/^color$/d" media-autobuild_suite/media-autobuild_suite.bat
+          sed -i 's/sed -r -i "s:LIBPATH_lib(ass|av(|device|filter))/sed -r -i "s:LIBPATH_(lib)?(ffmpeg|ass|av|archive|bluray|jpegxl(|device|filter))/g' media-autobuild_suite/build/media-suite_compile.sh
+          sed -i '/(video|audio) tools"$|_check=\(xvc.pc|sleep 5|_check=\(libplacebo.|# static do_vcs/i find $LOCALBUILDDIR -maxdepth 3 -type d -name "*-git" -exec rm -rf {} +' media-autobuild_suite/build/media-suite_compile.sh
+      - name: Cache
+        uses: actions/cache@main
+        with: 
+          path: msys64
+          key: msys-${{ hashFiles('./media-autobuild_suite/build/media-suite_compile.sh') }}
+          restore-keys: |
+             msys-${{ hashFiles('./media-autobuild_suite/build/media-suite_compile.sh') }}
+             msys-
+      - name: run media-autobuild
+        continue-on-error: true
+        id: media-autobuild
+        shell: cmd
+        run: |
+          ./media-autobuild_suite/media-autobuild_suite.bat
+      - name: 7z
+        shell: cmd
+        run: |
+          if exist ./media-autobuild_suite/build/logs.zip (7z.exe a ffmpeg.7z ./media-autobuild_suite/local64 ./media-autobuild_suite/build/logs.zip) else ("7z.exe a ffmpeg.7z ./media-autobuild_suite/local64)
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: media-autobuild_suite-${{ matrix.os }}
+          path: ffmpeg.7z
+          retention-days: 4
+      - name: error handling    
+        if: ${{ steps.media-autobuild.outcome == 'failure' }}
+        run:  exit 1
