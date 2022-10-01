@@ -42,11 +42,11 @@ jobs:
       - name: Cache
         uses: actions/cache@main
         with: 
-          path: msys64
-          key: msys-${{ hashFiles('./media-autobuild_suite/build/media-suite_compile.sh') }}
+          path: media-autobuild_suite/msys64
+          key: msys-1-${{ hashFiles('./media-autobuild_suite/build/media-suite_compile.sh') }}
           restore-keys: |
-             msys-${{ hashFiles('./media-autobuild_suite/build/media-suite_compile.sh') }}
-             msys-
+             msys-1-${{ hashFiles('./media-autobuild_suite/build/media-suite_compile.sh') }}
+             msys-1-
       - name: run media-autobuild
         continue-on-error: true
         id: media-autobuild
