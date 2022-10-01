@@ -31,7 +31,7 @@ jobs:
         with:
           submodules: recursive
       - name: Patch bash scripts
-        shell: pwsh
+        shell: cmd
         run: |
           sed -i 's/do_prompt /echo /g' media-autobuild_suite/build/media-suite_helper.sh media-autobuild_suite/build/media-suite_compile.sh
           sed -i 's/read.*yn/yn=y/g' media-autobuild_suite/build/media-suite_update.sh
