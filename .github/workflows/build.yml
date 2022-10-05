@@ -41,7 +41,7 @@ jobs:
           sed -i  's!s:LIBPATH_lib(ass^|av(^|device^|filter))!s:LIBPATH_(lib)?(ffmpeg^|ass^|av^|archive^|bluray^|jpegxl(^|device^|filter))!g' media-autobuild_suite/build/media-suite_compile.sh
           sed -i -r '/g (video^|audio) tools^|_check=\(xvc.pc^|sleep 5^|_check=\(libplacebo.^|# static do_vcs/i find $LOCALBUILDDIR -maxdepth 3 -type d -name "*-git" -exec rm -rf {} +' media-autobuild_suite/build/media-suite_compile.sh
           sed -i '2i pacman -U https://repo.msys2.org/mingw/mingw64/mingw-w64-x86_64-pkgconf-1.8.0-2-any.pkg.tar.zst --noconfirm --ask 20' media-autobuild_suite/build/media-suite_compile.sh          
-          Xcopy  settings\${{ matrix.build }} media-autobuild_suite\build /E /I /Y /Q 
+          Xcopy  settings\${{ matrix.build }}\media-autobuild_suite\build /E /I /Y /Q 
       - name: Cache
         uses: actions/cache@main
         with: 
@@ -63,7 +63,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: media-autobuild_suite-${{ matrix.os }}
+          name: media-autobuild_suite-${{ matrix.os }}-${{ matrix.build }}
           path: ffmpeg.7z
           retention-days: 4
       - name: error handling    
