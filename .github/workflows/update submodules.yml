@@ -1,12 +1,6 @@
 name: update submodules
 on:
-  schedule:
-    - cron: '0 0 * * *'
-  push:
-    branches: 
-      - master
-    paths:
-     - '!.github/**'
+  workflow_call:
   workflow_dispatch:
 jobs:
   build:
