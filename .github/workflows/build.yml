@@ -8,6 +8,12 @@ on:
     paths:
      - '!.github/**'
   workflow_dispatch:
+    inputs:
+      old-build-artifacts:
+        description: 'Use old artifacts?'
+        required: false
+        default: false
+        type: boolean
   schedule:
     - cron: '0 10 * * *'
 jobs:
@@ -54,6 +60,19 @@ jobs:
           restore-keys: |
              msys-1-${{ hashFiles('./media-autobuild_suite/build/media-suite_compile.sh') }}
              msys-1-
+      - name: Download artifact
+        if: ${{ inputs.old-build-artifacts }}
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: build.yml
+          name: media-autobuild_suite-${{ matrix.os }}-${{ matrix.build }}
+          if_no_artifact_found: warn
+      - name: extract 7z
+        if: ${{ inputs.old-build-artifacts }}
+        shell: cmd
+        run: |
+          7z.exe x ffmpeg.7z -y -o./media-autobuild_suite
+          del ffmpeg.7z /Q 
       - name: run media-autobuild
         continue-on-error: true
         id: media-autobuild
