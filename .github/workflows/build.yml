@@ -93,7 +93,6 @@ jobs:
         if: ${{ steps.media-autobuild.outcome == 'failure' }}
         run:  exit 1
   full-build:
-    if: ${{ success() }} || ${{ cancelled() }}
     needs: minimum-build
     strategy:
       fail-fast: false
