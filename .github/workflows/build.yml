@@ -93,6 +93,7 @@ jobs:
         run:  exit 1
   full-build:
     needs: minimum-build
+    if: ${{always()}}
     strategy:
       fail-fast: false
       matrix:
