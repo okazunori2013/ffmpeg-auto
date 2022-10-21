@@ -37,7 +37,7 @@ jobs:
           echo "Adding GNU tar to PATH"
           echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
       - name: cuda-toolkit
-        uses: Jimver/cuda-toolkit@master
+        uses: okazunori2013/cuda-toolkit@master
       - name: Checkout
         uses: actions/checkout@v3 
         with:
@@ -107,7 +107,7 @@ jobs:
           echo "Adding GNU tar to PATH"
           echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
       - name: cuda-toolkit
-        uses: Jimver/cuda-toolkit@master
+        uses: okazunori2013/cuda-toolkit@master
       - name: Checkout
         uses: actions/checkout@v3 
         with:
