@@ -73,23 +73,24 @@ jobs:
           7z.exe x ffmpeg.7z -y -o./media-autobuild_suite
           del ffmpeg.7z /Q 
       - name: run media-autobuild
-        continue-on-error: true
         id: media-autobuild
         shell: cmd
         run: |
           ./media-autobuild_suite/media-autobuild_suite.bat
       - name: 7z
+        if: ${{always()}}
         shell: cmd
         run: |
           if exist ./media-autobuild_suite/build/logs.zip (7z.exe a -y ffmpeg.7z ./media-autobuild_suite/local64 ./media-autobuild_suite/build/logs.zip) else (7z.exe a -y ffmpeg.7z ./media-autobuild_suite/local64)
       - name: Upload artifacts
+        if: ${{always()}}
         uses: actions/upload-artifact@v3
         with:
           name: media-autobuild_suite-${{ matrix.os }}-${{ matrix.build }}
-          path: ffmpeg.7z
-      - name: error handling    
-        if: ${{ steps.media-autobuild.outcome == 'failure' }}
-        run:  exit 1
+          path: |
+            ffmpeg.7z
+            media-autobuild_suite/build/*_options.txt
+            media-autobuild_suite/build/media-autobuild_suite.ini
   full-build:
     needs: minimum-build
     if: ${{always()}}
@@ -139,20 +140,21 @@ jobs:
              msys-1-${{ hashFiles('./media-autobuild_suite/build/media-suite_compile.sh') }}
              msys-1-
       - name: run media-autobuild
-        continue-on-error: true
         id: media-autobuild
         shell: cmd
         run: |
           ./media-autobuild_suite/media-autobuild_suite.bat
       - name: 7z
+        if: ${{always()}}
         shell: cmd
         run: |
           if exist ./media-autobuild_suite/build/logs.zip (7z.exe u -y ffmpeg.7z ./media-autobuild_suite/local64 ./media-autobuild_suite/build/logs.zip) else (7z.exe u -y ffmpeg.7z ./media-autobuild_suite/local64)
       - name: Upload artifacts
+        if: ${{always()}}
         uses: actions/upload-artifact@v3
         with:
           name: media-autobuild_suite-${{ matrix.os }}-${{ matrix.build }}
-          path: ffmpeg.7z
-      - name: error handling    
-        if: ${{ steps.media-autobuild.outcome == 'failure' }}
-        run:  exit 1
+          path: |
+            ffmpeg.7z
+            media-autobuild_suite/build/*_options.txt
+            media-autobuild_suite/build/media-autobuild_suite.ini
