@@ -3,7 +3,7 @@ on:
   workflow_call:
   workflow_dispatch:
 jobs:
-  update submodules:
+  update-submodules:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
