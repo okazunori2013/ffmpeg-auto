@@ -56,7 +56,7 @@ jobs:
         uses: actions/cache@main
         with: 
           path: media-autobuild_suite/msys64
-          key: msys-1-${{ hashFiles('./media-autobuild_suite/build/media-suite_compile.sh') }}
+          key: msys-2-${{ hashFiles('./media-autobuild_suite/build/media-suite_compile.sh') }}
           restore-keys: |
              msys-1-${{ hashFiles('./media-autobuild_suite/build/media-suite_compile.sh') }}
              msys-1-
