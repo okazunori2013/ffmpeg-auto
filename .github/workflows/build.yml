@@ -58,8 +58,8 @@ jobs:
           path: media-autobuild_suite/msys64
           key: msys-2-${{ hashFiles('./media-autobuild_suite/build/media-suite_compile.sh') }}
           restore-keys: |
-             msys-1-${{ hashFiles('./media-autobuild_suite/build/media-suite_compile.sh') }}
-             msys-1-
+             msys-2-${{ hashFiles('./media-autobuild_suite/build/media-suite_compile.sh') }}
+             msys-
       - name: Download artifact
         if: ${{ inputs.old-build-artifacts }}
         uses: dawidd6/action-download-artifact@v2
