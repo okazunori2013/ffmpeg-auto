@@ -46,6 +46,8 @@ jobs:
         shell: cmd
         run: |
           ./patch/patch_bash_scripts.bat
+          move /Y settings\${{ matrix.build }}\* media-autobuild_suite\build
+          for /d  %%d in (settings\common\*) do move /Y %%d\* media-autobuild_suite\build
       - name: Cache
         uses: actions/cache@main
         with: 
@@ -121,6 +123,8 @@ jobs:
         shell: cmd
         run: |
           ./patch/patch_bash_scripts.bat
+          move /Y settings\${{ matrix.build }}\* media-autobuild_suite\build
+          for /d  %%d in (settings\common\*) do move /Y %%d\* media-autobuild_suite\build
       - name: Cache
         uses: actions/cache@main
         with: 
