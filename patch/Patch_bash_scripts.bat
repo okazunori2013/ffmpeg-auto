@@ -8,5 +8,7 @@ rem for fix build
 sed -i '2i pacman -U https://repo.msys2.org/mingw/mingw64/mingw-w64-x86_64-gmp-6.2.1-3-any.pkg.tar.zst --noconfirm --ask 20' media-autobuild_suite/build/media-suite_compile.sh
 sed -i  's!s:LIBPATH_lib(ass^|av(^|device^|filter))!s:LIBPATH_(lib)?(ffmpeg^|ass^|av^|archive^|bluray^|jpegxl(^|device^|filter))!g' media-autobuild_suite/build/media-suite_compile.sh
 
+move /Y settings\${{ matrix.build }}\* media-autobuild_suite\build
+for /d  %%d in (settings\common\*) do move /Y %%d\* media-autobuild_suite\build
 
 echo hello!!
