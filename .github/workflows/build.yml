@@ -47,3 +47,7 @@ jobs:
           move /Y settings\${{ matrix.build }}\* media-autobuild_suite\build
           for /d  %%d in (settings\common\*) do move /Y %%d\* media-autobuild_suite\build
           dir media-autobuild_suite\build
+      - name: Patch bash scripts
+        shell: cmd
+        run: |
+          dir media-autobuild_suite\build
